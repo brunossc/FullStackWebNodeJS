@@ -13,9 +13,9 @@ var FolderController = require('./Controllers/FolderController'),
     helpers = require('./handlers/helpers');
 
 var app = express();
-var logger = morgan('dev');
+//var logger = morgan('dev');
 
-app.use(logger);
+//app.use(logger);
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
