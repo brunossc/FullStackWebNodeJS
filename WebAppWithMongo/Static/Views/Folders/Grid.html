@@ -1,0 +1,19 @@
+﻿    <div id="folderGrid">
+        <table width="100%">
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Description</th>
+            </tr>
+            {{#folders}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{title}}</td>
+                <td align="center">{{date}}</td>
+                <td>{{description}}</td>
+                
+            </tr>
+            {{/folders}}
+        </table>
+    </div>

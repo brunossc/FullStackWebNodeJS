@@ -1,0 +1,22 @@
+{
+  "name": "oldschool",
+  "version": "0.0.0",
+  "description": "Old school .NET",
+  "private": true,
+  "main": "server.js",
+  "author": {
+    "name": "BMB"
+  },
+  "dependencies": {
+    "async": "2.3.0",
+    "mongodb": "2.2.25",
+    "mustache": "2.3.0",
+    "body-parser": "1.17.1",
+    "cookie-parser": "1.4.3",
+    "express": "^4.15.2",
+    "express-basic-auth": "1.0.1",
+    "express-session": "1.15.2",
+    "multer": "1.3.0",
+    "morgan" : "1.8.1"
+  }
+}

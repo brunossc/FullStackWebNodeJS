@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Folders</title>
+    <script src="/Content/Scripts/External/jquery-3.2.0.min.js"></script>
+    <script src="/Content/Scripts/External/mustache.min.js"></script>
+    <script src="/Content/Scripts/local/Folder.js"></script>
+</head>
+<body>
+    <h1>Folders</h1>
+    <fieldset name="filterfield">
+        <legend>Filter:</legend>
+        <div id="filter"></div>
+    </fieldset>
+    
+    <div id="actions" style="width:100%"><hr size="1" style="width:100%" /><input style="align-self:stretch" type="button" id="addNewFolder" value="Add new" /><hr size="1" style="width:100%" /></div>
+    <fieldset name="gridfield">
+        <legend>List of Folders:</legend>
+        <div id="grid"></div>
+    </fieldset>
+    <script>
+            $(document).ready(function () {
+                Folder.InitIndex();
+            });
+    </script>
+    <div id="addNewFolderPopup" style="display:none; position:absolute; background-color:white;border:solid;border-color:blue; height:300px; width:400px"></div>
+</body>
+</html>
