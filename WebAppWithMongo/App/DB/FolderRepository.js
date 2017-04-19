@@ -3,7 +3,6 @@ var Repository = require('./Repository').Object;
 
 function FolderRepository(dbConn) {
     Repository.call(this, dbConn.collection("folder"));
-    var Error = "Error while try {0} in table \"Folder\" in Database.";
 }
 
 FolderRepository.prototype = Object.create(Repository.prototype);
