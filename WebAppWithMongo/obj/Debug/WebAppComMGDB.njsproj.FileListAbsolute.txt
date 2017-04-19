@@ -1,2 +1,1 @@
-D:\Bruno\Projetos\GitHub\FullStackNodeWebApp\WebAppWithMongo\obj\Debug\WebAppComMGDB.njsprojResolveAssemblyReference.cache
 D:\Bruno\Projetos\GitHub\FullStackNodeWebApp\WebAppWithMongo\bin\Microsoft.NodejsTools.WebRole.dll

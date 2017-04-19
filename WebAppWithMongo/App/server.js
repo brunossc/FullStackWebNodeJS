@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 // map static contents like content folder files(.js) and templates
 app.use(express.static(__dirname + "/../Static"));
 
-app.get("/v1/folders/GetAll", FolderController.GetAll_Folders);
+app.get("/v1/folder/:action", FolderController.RestCall);
 //app.get("/v1/folders/:folder_name.json", files.get_folder);
 
 app.get("/:controller_name/:page_name", pages.server_page);

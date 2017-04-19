@@ -31,7 +31,6 @@ FolderBusiness.prototype.Save = function (folder, callback) {
         function (conn, cb)
         {
             _self.Repository = new FolderRepository(conn);
-            //_self.RepositoryFile = FileRepository.Instance(conn);
             _self.dbConn = conn;
             cb(null);
         },
@@ -107,7 +106,6 @@ FolderBusiness.prototype.Update = function (filter, set, callback)
         },
         function (conn, cb) {
             _self.Repository = new FolderRepository(conn);
-            //_self.RepositoryFile = FileRepository.Instance(conn);
             _self.dbConn = conn;
             cb(null);
         },
@@ -120,16 +118,29 @@ FolderBusiness.prototype.Update = function (filter, set, callback)
     });
 };
 
-FolderBusiness.prototype.Find = function (filter, cb) {
+FolderBusiness.prototype.Find = function (filter, callback) {
+
     if (!_self.validateFilter(filter)) {
         cb(objectError.replace("{0}", "Find Folder"));
         return;
     }
 
-    _self.Repository.Find(filter, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
+    async.waterfall([
+        function (cb) {
+            db.GetDbConn(cb);
+        },
+        function (conn, cb) {
+            _self.Repository = new FolderRepository(conn);
+            _self.dbConn = conn;
+            cb(null);
+        },
+        function (cb) {
+            _self.Repository.Find(filter, cb);
+        }
+    ], function (err, results) {
+        _self.Dispose();
+        callback(err, results);
+        });
 };
 
 FolderBusiness.prototype.FindById = function (id, callback) {
