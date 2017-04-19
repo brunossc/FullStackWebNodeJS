@@ -9,8 +9,7 @@ var _folderBusiness = FolderBusiness.Instance();
 exports.DoAction = function (req, res) {
     var action = req.params.action;
     var formValues = req.body;
-
-    switch (action.toLowerCase()) {        
+        switch (action.toLowerCase()) {        
         case "save":
             if (!formValues.id) {
                 _folderBusiness.Save(formValues, function (err, result) {
