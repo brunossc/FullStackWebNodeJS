@@ -52,7 +52,7 @@
     <Compile Include="App\DB\FileRepository.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="App\DB\DbOperations.js">
+    <Compile Include="App\DB\Repository.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Static\Model\FolderEntity.js" />
@@ -72,7 +72,6 @@
     <Content Include="Static\Views\Files\GridFiles.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Static\Views\Folders\Edit.html" />
     <Content Include="Static\Views\Folders\Create.html">
       <SubType>Code</SubType>
     </Content>

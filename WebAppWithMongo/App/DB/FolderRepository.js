@@ -1,57 +1,66 @@
 ﻿'use strict';
-var DbOperations = require('./DbOperations');
+var Repository = require('./Repository').Object;
 
 function FolderRepository(dbConn) {
-    this.table = dbConn.collection("folder");
-    this.dbOperations = DbOperations.Instance();
+    Repository.call(this, dbConn.collection("folder"));
     var Error = "Error while try {0} in table \"Folder\" in Database.";
 }
 
-FolderRepository.prototype.table = null;
-FolderRepository.prototype.dbOperations = null;
+FolderRepository.prototype = Object.create(Repository.prototype);
 
 FolderRepository.prototype.Insert = function (data, cb) {
-    if (this.table == null)
-    {
-        return cb(this.initError.replace("{0}","Insert"));
-    }
+    //if (this.table == null)
+    //{
+    //    return cb(this.initError.replace("{0}","Insert"));
+    //}
 
-    this.dbOperations.Insert(data, this.table, cb);
+    this.BaseInsert(data, cb);
 };
 
 FolderRepository.prototype.Delete = function (filter, cb) {
 
-    if (this.table == null) {
-        cb(this.initError.replace("{0}", "Delete"));
-    }
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "Delete"));
+    //}
 
-    this.dbOperations.Delete(filter, this.table, cb);
+    this.BaseDelete(filter, cb);
+};
+
+FolderRepository.prototype.DeleteById = function (id, cb) {
+
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "Delete By Id"));
+    //}
+
+    this.BaseDeleteById(id, cb);
 };
 
 FolderRepository.prototype.Update = function (filter, set, cb) {
-    if (this.table == null) {
-        cb(this.initError.replace("{0}", "Update"));
-    }
-    this.dbOperations.update(filter, set, this.table, cb);
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "Update"));
+    //}
+    this.BaseUpdate(filter, set, cb);
 };
 
 FolderRepository.prototype.GetAll = function (cb) {
-    if (this.table == null) {
-        cb(this.initError.replace("{0}", "GetAll"));
-    }
-    this.dbOperations.GetAll(this.table, cb);
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "GetAll"));
+    //}
+
+    this.BaseGetAll(cb);
 };
 
 FolderRepository.prototype.Find = function (filter, cb) {
-    if (this.table == null) {
-        cb(this.initError.replace("{0}", "Find"));
-    }
-    this.dbOperations.Find(filter, this.table, cb);
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "Find"));
+    //}
+    this.BaseFind(filter, cb);
 };
 
-exports.Instance = function (dbConn) {
-
-        return new FolderRepository(dbConn);
-    
+FolderRepository.prototype.FindById = function (id, cb) {
+    //if (this.table == null) {
+    //    cb(this.initError.replace("{0}", "Find"));
+    //}
+    this.BaseFindById(id, cb);
 };
-
+exports.Object = FolderRepository;

@@ -13,8 +13,7 @@
                         if ($("#addNewFolderPopup").css('display') == 'block') {
                             Folder.SetPopUpPosition("addNewFolderPopup");
                         }
-                        else
-                        {
+                        else {
                             Folder.InitGrid();
                         }
                     });
@@ -27,8 +26,7 @@
         });
 
         $.get("/folders/Create.html", function (result) {
-            $("#addNewFolderPopup").html(result).promise().done(function ()
-            {
+            $("#addNewFolderPopup").html(result).promise().done(function () {
                 Folder.InitCreate();
             });
         });
@@ -42,6 +40,7 @@
 
             var jsonObject =
                 {
+                    id: $(this).find("input[name='id']").val(),
                     name: $(this).find("input[name='name']").val(),
                     date: $(this).find("input[name='date']").val(),
                     title: $(this).find("input[name='title']").val(),
@@ -60,8 +59,7 @@
         });
     },
 
-    "InitGrid": function ()
-    {
+    "InitGrid": function () {
         var tmpl = null,
             tdata = null;
 
@@ -86,14 +84,42 @@
                 //        $(this).parent().find("ul").toggle();
                 //    });
                 //});
+
+                $("input[id='remove']").click(function () {
+                    $.post("/folder/deleteById", { _id: $(this).attr("objectId") }).done(function (result) {
+                        if (result.error != null) {
+                            alert(JSON.stringify(result.error));
+                        }
+                        else {
+                            Folder.InitGrid();
+                        }
+                    });
+                });
+
+                $("input[id='edit']").click(function () {
+                    $.post("/folder/findbyid", { _id: $(this).attr("objectId") }).done(function (result) {
+                        if (result.error != null) {
+                            alert(JSON.stringify(result.error));
+                        }
+                        else {
+                            $("#addNewFolder").click();
+
+                            var folder = result.data[0];
+
+                            $("#createFolder").find("input[name='id']").val(folder._id);
+                            $("#createFolder").find("input[name='name']").val(folder.name);
+                            $("#createFolder").find("input[name='date']").val(folder.date);
+                            $("#createFolder").find("input[name='title']").val(folder.title);
+                            $("#createFolder").find("input[name='description']").val(folder.description);
+                        }
+                    });
+                });
             });
         });
     },
 
     //A better place for this function is a helpers class, util class or something like this.
-    "SetPopUpPosition": function (selector)
-    {
-        debugger;
+    "SetPopUpPosition": function (selector) {
         $("#" + selector).offset(
             {
                 left: ($(window).innerWidth() / 2) - parseInt($("#" + selector).css("width")) / 2,

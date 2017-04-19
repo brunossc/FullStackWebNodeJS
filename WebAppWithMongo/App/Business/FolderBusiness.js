@@ -1,7 +1,7 @@
 ﻿'use strict';
 var db = require('../DB/DbContext'),
-    FolderRepository = require('../DB/FolderRepository'),
-    FileRepository = require('../DB/FileRepository'),
+    FolderRepository = require('../DB/FolderRepository').Object,
+    //FileRepository = require('../DB/FileRepository'),
     async = require('async');
 
 var _self = null;
@@ -30,7 +30,7 @@ FolderBusiness.prototype.Save = function (folder, callback) {
         },
         function (conn, cb)
         {
-            _self.Repository = FolderRepository.Instance(conn);
+            _self.Repository = new FolderRepository(conn);
             //_self.RepositoryFile = FileRepository.Instance(conn);
             _self.dbConn = conn;
             cb(null);
@@ -44,27 +44,79 @@ FolderBusiness.prototype.Save = function (folder, callback) {
     });
 };
 
-FolderBusiness.prototype.Delete = function (filter, cb) {
+FolderBusiness.prototype.Delete = function (filter, callback) {
     if (!_self.validateFilter(filter)) {
         cb(objectError.replace("{0}", "Delete Folder"));
         return;
     }
 
-    _self.Repository.Delete(filter, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
+    async.waterfall([
+        function (cb) {
+            db.GetDbConn(cb);
+        },
+        function (conn, cb) {
+            _self.Repository = new FolderRepository(conn);
+            //_self.RepositoryFile = FileRepository.Instance(conn);
+            _self.dbConn = conn;
+            cb(null);
+        },
+        function (cb) {
+            _self.Repository.Delete(filter, cb);
+        }
+    ], function (err, results) {
+        _self.Dispose();
+        callback(err, results);
     });
 };
 
-FolderBusiness.prototype.Update = function (filter, set, cb) {
+FolderBusiness.prototype.DeleteById = function (id, callback) {
+    if (!_self.validateFilter(id)) {
+        cb(objectError.replace("{0}", "Delete Folder"));
+        return;
+    }
+
+    async.waterfall([
+        function (cb) {
+            db.GetDbConn(cb);
+        },
+        function (conn, cb) {
+            _self.Repository = new FolderRepository(conn);
+            //_self.RepositoryFile = FileRepository.Instance(conn);
+            _self.dbConn = conn;
+            cb(null);
+        },
+        function (cb) {
+            _self.Repository.DeleteById(id, cb);
+        }
+    ], function (err, results) {
+        _self.Dispose();
+        callback(err, results);
+    });
+};
+
+FolderBusiness.prototype.Update = function (filter, set, callback)
+{
     if (!_self.validateFilter(filter, set)) {
         cb(objectError.replace("{0}", "Update Folder"));
         return;
     }
 
-    _self.Repository.Update(filter, set, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
+    async.waterfall([
+        function (cb) {
+            db.GetDbConn(cb);
+        },
+        function (conn, cb) {
+            _self.Repository = new FolderRepository(conn);
+            //_self.RepositoryFile = FileRepository.Instance(conn);
+            _self.dbConn = conn;
+            cb(null);
+        },
+        function (cb) {
+            _self.Repository.Update(filter, set, cb);
+        }
+    ], function (err, results) {
+        _self.Dispose();
+        callback(err, results);
     });
 };
 
@@ -78,6 +130,32 @@ FolderBusiness.prototype.Find = function (filter, cb) {
         _self.dbConn.close();
         cb(err, results);
     });
+};
+
+FolderBusiness.prototype.FindById = function (id, callback) {
+    if (!_self.validateFilter(id)) {
+        cb(objectError.replace("{0}", "Find Folder"));
+        return;
+    }
+
+    async.waterfall([
+        function (cb) {
+            db.GetDbConn(cb);
+        },
+        function (conn, cb) {
+            _self.Repository = new FolderRepository(conn);
+            //_self.RepositoryFile = FileRepository.Instance(conn);
+            _self.dbConn = conn;
+            cb(null);
+        },
+        function (cb) {
+            _self.Repository.FindById(id, cb);
+        }
+    ], function (err, results) {
+        _self.Dispose();
+        callback(err, results);
+        });
+
 };
 
 FolderBusiness.prototype.FindWithFiles = function (filter, cb) {
@@ -99,7 +177,7 @@ FolderBusiness.prototype.GetAll = function (callback) {
             db.GetDbConn(cb);
         },
         function (conn, cb) {
-            _self.Repository = FolderRepository.Instance(conn);
+            _self.Repository = new FolderRepository(conn);
             //_self.RepositoryFile = FileRepository.Instance(conn);
             _self.dbConn = conn;
             cb(null);
@@ -121,79 +199,79 @@ FolderBusiness.prototype.GetAllWithFiles = function (cb) {
 };
 
 // Files Methods
-FolderBusiness.prototype.SaveFile = function (file, cb) {
-    if (!_self.validateFile(file)) {
-        cb(objectError.replace("{0}", "Save File"));
-        return;
-    }
+//FolderBusiness.prototype.SaveFile = function (file, cb) {
+//    if (!_self.validateFile(file)) {
+//        cb(objectError.replace("{0}", "Save File"));
+//        return;
+//    }
 
-    _self.RepositoryFile.Insert(file, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//    _self.RepositoryFile.Insert(file, function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.DeleteFile = function (filter, cb) {
-    if (!_self.validateFileFilter(filter)) {
-        cb(objectError.replace("{0}", "Delete File"));
-        return;
-    }
+//FolderBusiness.prototype.DeleteFile = function (filter, cb) {
+//    if (!_self.validateFileFilter(filter)) {
+//        cb(objectError.replace("{0}", "Delete File"));
+//        return;
+//    }
 
-    _self.RepositoryFile.Delete(filter, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//    _self.RepositoryFile.Delete(filter, function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.Update = function (filter, set, cb) {
-    if (!_self.validateFileFilter(filter, set)) {
-        cb(objectError.replace("{0}", "Update File"));
-        return;
-    }
+//FolderBusiness.prototype.Update = function (filter, set, cb) {
+//    if (!_self.validateFileFilter(filter, set)) {
+//        cb(objectError.replace("{0}", "Update File"));
+//        return;
+//    }
 
-    _self.RepositoryFile.Update(filter, set, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//    _self.RepositoryFile.Update(filter, set, function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.Find = function (filter, cb) {
-    if (!_self.validateFileFilter(filter)) {
-        cb(objectError.replace("{0}", "Find File"));
-        return;
-    }
+//FolderBusiness.prototype.Find = function (filter, cb) {
+//    if (!_self.validateFileFilter(filter)) {
+//        cb(objectError.replace("{0}", "Find File"));
+//        return;
+//    }
 
-    _self.RepositoryFile.Find(filter, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//    _self.RepositoryFile.Find(filter, function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.FindWithFiles = function (filter, cb) {
-    if (!_self.validateFileFilter(filter)) {
-        cb(objectError.replace("{0}", "Find File"));
-        return;
-    }
+//FolderBusiness.prototype.FindWithFiles = function (filter, cb) {
+//    if (!_self.validateFileFilter(filter)) {
+//        cb(objectError.replace("{0}", "Find File"));
+//        return;
+//    }
 
-    _self.RepositoryFileRepositoryFile.Find(filter, function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//    _self.RepositoryFileRepositoryFile.Find(filter, function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.GetAllFiles = function (cb) {
-    _self.RepositoryFile.GetAll(function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//FolderBusiness.prototype.GetAllFiles = function (cb) {
+//    _self.RepositoryFile.GetAll(function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
-FolderBusiness.prototype.GetAllWithFiles = function (cb) {
-    _self.RepositoryFile.GetAll(function (err, results) {
-        _self.dbConn.close();
-        cb(err, results);
-    });
-};
+//FolderBusiness.prototype.GetAllWithFiles = function (cb) {
+//    _self.RepositoryFile.GetAll(function (err, results) {
+//        _self.dbConn.close();
+//        cb(err, results);
+//    });
+//};
 
 FolderBusiness.prototype.validateFolder = function (folder) {
     return true;
@@ -214,6 +292,7 @@ FolderBusiness.prototype.validateFileFilter = function (filter, set) {
 FolderBusiness.prototype.Dispose = function () {
 
     _self.dbConn.close();
+
     _self.dbConn = null;
     _self.Repository = null;
     _self.RepositoryFile = null;

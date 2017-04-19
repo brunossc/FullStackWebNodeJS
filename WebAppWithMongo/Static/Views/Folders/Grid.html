@@ -1,10 +1,11 @@
 ﻿    <div id="folderGrid">
-        <table width="100%">
+        <table width="100%" border="1">
             <tr>
                 <th>Name</th>
                 <th>Title</th>
                 <th>Date</th>
                 <th>Description</th>
+                <th colspan="2" width="10%">Actions</th>
             </tr>
             {{#folders}}
             <tr>
@@ -12,7 +13,8 @@
                 <td>{{title}}</td>
                 <td align="center">{{date}}</td>
                 <td>{{description}}</td>
-                
+                <td><input type="button" id="edit" value="Edit" objectId="{{_id}}"/></td>
+                <td><input type="button" id="remove" value="Remove" objectId="{{_id}}"/></td>
             </tr>
             {{/folders}}
         </table>

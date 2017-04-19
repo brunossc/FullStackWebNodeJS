@@ -1,0 +1,2 @@
+C:\Users\BMB\documents\visual studio 2017\Projects\NodejsWebApp1\MongoDB\obj\Debug\MongoDB.njsprojResolveAssemblyReference.cache
+C:\Users\BMB\documents\visual studio 2017\Projects\NodejsWebApp1\MongoDB\bin\Microsoft.NodejsTools.WebRole.dll

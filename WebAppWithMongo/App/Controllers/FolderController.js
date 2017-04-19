@@ -8,9 +8,58 @@ var _folderBusiness = FolderBusiness.Instance();
 
 exports.DoAction = function (req, res) {
     var action = req.params.action;
-    switch (action) {
+    var formValues = req.body;
+
+    switch (action.toLowerCase()) {        
         case "save":
-            _folderBusiness.Save(req.body, function (err, result) {
+            if (!formValues.id) {
+                _folderBusiness.Save(formValues, function (err, result) {
+                    if (err != null) {
+                        helpers.send_failure(res, 501, err);
+                        return;
+                    }
+
+                    helpers.send_success(res, result);
+                });
+            }
+            else
+            {
+                var filter = { '_id':formValues.id };
+                delete formValues["id"];
+                var set = formValues;
+
+                _folderBusiness.Update(filter, set, function (err, result) {
+                    if (err != null) {
+                        helpers.send_failure(res, 501, err);
+                        return;
+                    }
+
+                    helpers.send_success(res, result);
+                });
+            }
+            break;
+        case "delete":
+            _folderBusiness.Delete(formValues, function (err, result) {
+                if (err != null) {
+                    helpers.send_failure(res, 501, err);
+                    return;
+                }
+
+                helpers.send_success(res, result);
+            });
+            break;
+        case "deletebyid":
+            _folderBusiness.DeleteById(formValues, function (err, result) {
+                if (err != null) {
+                    helpers.send_failure(res, 501, err);
+                    return;
+                }
+
+                helpers.send_success(res, result);
+            });
+            break;
+        case "findbyid":
+            _folderBusiness.FindById(formValues, function (err, result) {
                 if (err != null) {
                     helpers.send_failure(res, 501, err);
                     return;
