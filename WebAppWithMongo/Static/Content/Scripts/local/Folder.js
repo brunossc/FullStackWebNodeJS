@@ -11,10 +11,8 @@
                 $("#addNewFolder").on('click', function () {
                     $("#addNewFolderPopup").toggle(0, function () {
                         if ($("#addNewFolderPopup").css('display') == 'block') {
+                            Folder.CleanForm();
                             Folder.SetPopUpPosition("addNewFolderPopup");
-                        }
-                        else {
-                            Folder.InitGrid();
                         }
                     });
                 });
@@ -22,10 +20,8 @@
         });
 
         $.get("/folders/Filter.html", function (result) {
-            $("#filter").html(result).promise().done(function ()
-            {
-                $("#search").click(function ()
-                {
+            $("#filter").html(result).promise().done(function () {
+                $("#search").click(function () {
                     var tmpl = null,
                         tdata = null,
                         value = $("#nameFilter").val();
@@ -44,9 +40,8 @@
                             Folder.BindingDataOnGrid(tmpl, tdata)
                         });
                     }
-                    else
-                    {
-                        alert("Please enter a value to search!!");
+                    else {
+                        Folder.InitGrid();
                     }
                 });
             });
@@ -61,6 +56,7 @@
     },
 
     "InitCreate": function () {
+        Folder.CleanForm();
         $("#createFolder").submit(function (event) {
             // Stop form from submitting normally
             event.preventDefault();
@@ -80,7 +76,12 @@
                 }
                 else {
                     $("#addNewFolderPopup").toggle();
-                    Folder.InitGrid();
+                    if ($("#nameFilter").val()) {
+                        $("#search").click();
+                    }
+                    else {
+                        Folder.InitGrid();
+                    }
                 }
             });
         });
@@ -108,6 +109,14 @@
         });
     },
 
+    "CleanForm": function () {
+        $("#createFolder").find("input[name='id']").val("");
+        $("#createFolder").find("input[name='name']").val("");
+        $("#createFolder").find("input[name='date']").val("");
+        $("#createFolder").find("input[name='title']").val("");
+        $("#createFolder").find("input[name='description']").val("");
+    },
+
     //A better place for this function is a helpers class, util class or something like this.
     "SetPopUpPosition": function (selector) {
         $("#" + selector).offset(
@@ -117,15 +126,9 @@
             });
     },
 
-    "BindingDataOnGrid": function (tmpl, tdata)
-    {
+    "BindingDataOnGrid": function (tmpl, tdata) {
         var renderedPage = Mustache.to_html(tmpl, { folders: tdata });
         $("#folderGrid").html(renderedPage).promise().done(function () {
-            //$.each(tdata.folders, function (i, item) {
-            //    $("#" + item.folder_name + "_link").click(function () {
-            //        $(this).parent().find("ul").toggle();
-            //    });
-            //});
 
             $("input[id='remove']").click(function () {
                 $.post("/folder/deleteById", { _id: $(this).attr("objectId") }).done(function (result) {
