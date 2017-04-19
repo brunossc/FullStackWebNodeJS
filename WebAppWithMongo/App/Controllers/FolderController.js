@@ -90,9 +90,8 @@ exports.RestCall = function (req, res) {
         case "findsearch":
             var url_parts = url.parse(req.url, true);
             var query = url_parts.query;
-            var reg = query.name;
 
-            var filter = { "name": new RegExp(reg)};
+            var filter = { "name": new RegExp(query.name)};
 
             _folderBusiness.Find(filter, function (err, result) {
                 if (err != null) {
