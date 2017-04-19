@@ -15,4 +15,4 @@ Algumas considerações do projeto:
 
 6 - Criei os models como parte do exercicio mas não utilizei.
 
-7 - Temos apenas duas funcionalidades funcionando a de obter todos e listar na grid utilizando o módulo "Mustache" e o cadastro de novas as outras funcinalidades é preciso apenas a justar o metodos na classe business.
+url Inicial: http://localhost:1337/folders/index.html
